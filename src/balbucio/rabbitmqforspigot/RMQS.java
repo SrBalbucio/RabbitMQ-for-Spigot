@@ -12,13 +12,13 @@ import com.rabbitmq.client.ConnectionFactory;
 import com.rabbitmq.client.DeliverCallback;
 
 import balbucio.rabbitmqforspigot.events.RMQSMessageReceivedEvent;
+import balbucio.rabbitmqforspigot.events.RMQSMessageSentEvent;
 
 public class RMQS {
 	
 	private ConnectionFactory factory;
 	private Connection connection;
 	private Channel channel;
-	private String queue;
 	
 	public RMQS(String host, int port) throws Exception{
 		factory = new ConnectionFactory();
@@ -41,8 +41,9 @@ public class RMQS {
 	    channel.basicConsume(queue, true, deliverCallback, consumerTag -> {});
 	}
 	
-	public void sendMessage(String message) throws IOException {
+	public void sendMessage(String message, String queue) throws IOException {
 		channel.basicPublish("", queue, null, message.getBytes());
+        Bukkit.getPluginManager().callEvent(new RMQSMessageSentEvent(message, queue, channel, connection));
 	}
 	
 	public List<String> getQueues(){

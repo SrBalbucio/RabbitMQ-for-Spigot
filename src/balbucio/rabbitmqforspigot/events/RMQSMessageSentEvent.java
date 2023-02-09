@@ -11,16 +11,21 @@ public class RMQSMessageSentEvent extends Event {
 	private String message;
 	private Channel channel;
 	private Connection connection;
-	
+	private String queue;
 	
 
-	public RMQSMessageSentEvent(String message, Channel channel, Connection connection) {
+	public RMQSMessageSentEvent(String message, String queue, Channel channel, Connection connection) {
 		this.message = message;
 		this.channel = channel;
 		this.connection = connection;
 	}
 
 
+	
+
+	public String getQueue() {
+		return queue;
+	}
 
 	public String getMessage() {
 		return message;
